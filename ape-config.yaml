@@ -2,7 +2,6 @@ name: taco-rewards-bot
 
 plugins:
   - name: solidity
-  # - name: ape-etherscan
 
 dependencies:
   - name: nucypher-contracts
