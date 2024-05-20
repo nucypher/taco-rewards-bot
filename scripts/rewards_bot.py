@@ -3,22 +3,39 @@ import time
 from ape import project
 from ape.cli import ConnectedProviderCommand, account_option
 
+YEAR_IN_SECONDS = 31536000
+TACo_APP_ADDRESS = "0x329bc9Df0e45f360583374726ccaFF003264a136"
+
 
 @click.command(cls=ConnectedProviderCommand)
 @account_option()
-def cli(account):
+@click.option(
+    "--apy",
+    "-a",
+    help="Staking rewards APY in %. Used to estimate the rewards to be pushed",
+    default=3.75,
+    required=True,
+    type=click.FLOAT,
+)
+def cli(account, apy):
     account.set_autosign(enabled=True)
 
     taco_application = project.dependencies["nucypher-contracts"][
         "main"
-    ].TACoApplication.at("0x329bc9Df0e45f360583374726ccaFF003264a136")
+    ].TACoApplication.at(TACo_APP_ADDRESS)
 
-    # TODO: calculate the rewards to be pushed
-    authorized = taco_application.authorizedOverall()
+    authorized_overall = taco_application.authorizedOverall()
     last_update_time = taco_application.lastUpdateTime()
-    time_elapsed = time.now() - last_update_time
-    # push_rewards = authorized * 0.0375 /
 
-    print(time_elapsed)
+    rewards_to_be_pushed = int(
+        authorized_overall
+        * (apy / 100)
+        * (int(time.time()) - last_update_time)
+        / YEAR_IN_SECONDS
+    )
 
-    # contract.pushReward(100, sender=account)
+    # TODO: check error
+    taco_application.pushReward(rewards_to_be_pushed, sender=account)
+
+    # TODO: use logger instead of print
+    print(int(rewards_to_be_pushed))
