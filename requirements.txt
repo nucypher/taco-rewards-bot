@@ -2,3 +2,4 @@ pre-commit==3.7.1
 eth-ape~=0.7.0
 ape-solidity~=0.7.0
 ape-infura~=0.7.0
+ape-foundry~=0.7.0
