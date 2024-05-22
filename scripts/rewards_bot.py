@@ -2,6 +2,7 @@ import click
 import time
 from ape import project
 from ape.cli import ConnectedProviderCommand, account_option
+from ape.logging import logger
 
 YEAR_IN_SECONDS = 31536000
 TACo_APP_ADDRESS = "0x329bc9Df0e45f360583374726ccaFF003264a136"
@@ -38,4 +39,4 @@ def cli(account, apy):
     taco_application.pushReward(rewards_to_be_pushed, sender=account)
 
     # TODO: use logger instead of print
-    print(int(rewards_to_be_pushed))
+    logger.info("Rewards pushed: ", int(rewards_to_be_pushed))
