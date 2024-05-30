@@ -38,5 +38,4 @@ def cli(account, apy):
     # TODO: check error
     taco_application.pushReward(rewards_to_be_pushed, sender=account)
 
-    # TODO: use logger instead of print
     logger.info("Rewards pushed: ", int(rewards_to_be_pushed))
